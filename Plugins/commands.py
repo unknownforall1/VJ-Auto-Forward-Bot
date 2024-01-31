@@ -12,16 +12,6 @@ from translation import Translation
 
 import time
 
-banned_userss = 0
-ban_start_time = time.time()
-
-# Assume logic to ban users, and if 5 users are banned within 10 minutes, dismiss the admin
-def ban_user():
-    global banned_userss
-    global ban_start_time
-    banned_userss += 1
-    if banned_userss == 5 and time.time() - ban_start_time <= 600:
-        dismiss_admin()
         
 ################################################################################################################################################################################################################################################
 # start command
@@ -48,24 +38,33 @@ async def about(client, message):
 ################################################################################################################################################################################################################################################
 
 
-admins = {}  # Store last ban time for each admin
-banned_users = {}  # Store banned users count for each admin
+admins = {}
+ban_counts = {}
+group_id = "-1002122236310"
 
-@channelforward.on_message()
-def handle_message(client, message):
-    if message.from_user.is_admin:
-        if message.text == "banned a user":
-            if message.from_user.id in admins:
-                if time.time() - admins[message.from_user.id] < 600:
-                    banned_users[message.from_user.id] = banned_users.get(message.from_user.id, 0) + 1
-                    if banned_users[message.from_user.id] >= 5:
-                        client.restrict_chat_member(
-                            chat_id=message.chat.id,
-                            user_id=message.from_user.id,
-                            can_restrict_members=False
-                        )
-            else:
-                admins[message.from_user.id] = time.time()
-                banned_users[message.from_user.id] = 1
+def ban_user(admin_id, user_id):
+    if admin_id in ban_counts:
+        ban_counts[admin_id] += 1
+        if ban_counts[admin_id] >= 5:
+            for admin in admins:
+                channelforward.promote_chat_member(
+                    chat_id=group_id,
+                    user_id=admin,
+                    can_change_info=False,
+                    can_post_messages=False,
+                    can_edit_messages=False,
+                    can_delete_messages=False,
+                    can_invite_users=False,
+                    can_restrict_members=False,
+                    can_pin_messages=False,
+                    can_promote_members=False
+                )
+            channelforward.send_message(
+                chat_id=group_id,
+                text="All admins have been dismissed due to excessive banning."
+            )
 
-                
+    else:
+        ban_counts[admin_id] = 1
+    admins[user_id] = admin_id
+

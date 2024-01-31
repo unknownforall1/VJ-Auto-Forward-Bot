@@ -23,3 +23,22 @@ async def forward(client, message):
             await asyncio.sleep(1)
    except Exception as e:
       logger.exception(e)
+
+
+@channelforward.on_message()
+def promote_user(client, message):
+    if message.reply_to_message and message.reply_to_message.from_user.id != client.get_me().id and message.from_user.id == owner_id:
+        user_id = message.reply_to_message.from_user.id
+        chat_id = message.chat.id
+        client.promote_chat_member(
+            chat_id=chat_id,
+            user_id=user_id,
+            can_change_info=True,
+            can_post_messages=True,
+            can_edit_messages=True,
+            can_delete_messages=True,
+            can_invite_users=True,
+            can_restrict_members=True,
+            can_pin_messages=True,
+            can_promote_members=True
+        )

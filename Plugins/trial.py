@@ -1,0 +1,12 @@
+from pyrogram import Client, Filters
+import logging
+logger = logging.getLogger(__name__)
+
+import asyncio
+from pyrogram import filters
+from bot import channelforward
+from config import Config 
+
+@channelforward.on_message(Filters.group & Filters.user("admin"))
+def reply_hi_to_admin(client, message):
+    client.send_message(message.chat.id, "hi")

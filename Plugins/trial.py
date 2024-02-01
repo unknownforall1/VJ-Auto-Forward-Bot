@@ -1,4 +1,4 @@
-from pyrogram import Client, Filters
+from pyrogram import Client
 import logging
 logger = logging.getLogger(__name__)
 

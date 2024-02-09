@@ -7,6 +7,18 @@ from pyrogram import filters
 from bot import channelforward
 from config import Config 
 
-@channelforward.on_message(filters.group & filters.admins)
-def reply_hi_to_admin(client, message):
-    client.send_message(message.chat.id, "hi")
+from pyrogram import Client
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+
+# Handler for when bot is added to a group
+@channelforwardbot.on_chat_created()
+async def send_add_me_button(client, chat):
+    if chat.type == "supergroup":
+        await client.send_message(
+            chat_id=chat.id,
+            text=" add our music bot:",
+            reply_markup=InlineKeyboardMarkup(
+                [[InlineKeyboardButton("Add Me", url="https://t.me/Sid_Musicbot?startgroup=true")]]
+            )
+        )

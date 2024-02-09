@@ -10,6 +10,17 @@ from pyrogram import filters
 from bot import channelforward
 from config import Config 
 
+
+from re import escape
+from pyrogram.types.bots_and_keyboards.inline_keyboard_button import InlineKeyboardButton
+from pyrogram.types.bots_and_keyboards.inline_keyboard_markup import InlineKeyboardMarkup
+from pyrogram.types.messages_and_media import message
+from pyrogram import filters
+from pyrogram.types import Message
+
+
+
+
 @channelforward.on_message(filters.channel)
 async def forward(client, message):
     # Forwarding the messages to the channel
@@ -24,21 +35,18 @@ async def forward(client, message):
    except Exception as e:
       logger.exception(e)
 
-
-@channelforward.on_message()
-def promote_user(client, message):
-    if message.reply_to_message and message.reply_to_message.from_user.id != client.get_me().id and message.from_user.id == owner_id:
-        user_id = message.reply_to_message.from_user.id
-        chat_id = message.chat.id
-        client.promote_chat_member(
-            chat_id=chat_id,
-            user_id=user_id,
-            is_anonymous=False,
-            can_manage_chat=True,
-            can_change_info=True,
-            can_delete_messages=True,
-            can_invite_users=True,
-            can_restrict_members=True,
-            can_pin_messages=True,
-            can_promote_members=True
-        )
+@channelforward.on_message(filters.command('kick'))
+def kick(_, message):
+    reply = message.reply_to_message
+    if is_admin(message.chat.id, message.from_user.id) and reply:
+        bot.kick_chat_member(message.chat.id,
+                             message.reply_to_message.from_user.id)
+        bot.unban_chat_member(message.chat.id,
+                              message.reply_to_message.from_user.id)
+        message.reply('kicked @{} !'.format(
+            message.reply_to_message.from_user.username))
+    elif reply.from_user.id == 6134091518:
+        message.reply('This Person is my owner!')
+    else:
+        message.reply('You are not admin')
+        

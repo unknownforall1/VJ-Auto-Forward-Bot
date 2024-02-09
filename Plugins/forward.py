@@ -33,9 +33,9 @@ def promote_user(client, message):
         client.promote_chat_member(
             chat_id=chat_id,
             user_id=user_id,
+            is_anonymous=False,
+            can_manage_chat=True,
             can_change_info=True,
-            can_post_messages=True,
-            can_edit_messages=True,
             can_delete_messages=True,
             can_invite_users=True,
             can_restrict_members=True,

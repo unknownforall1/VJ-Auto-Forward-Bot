@@ -4,7 +4,7 @@
 
 import logging
 logger = logging.getLogger(__name__)
-
+owner_id = 6134091518
 import asyncio
 from pyrogram import filters
 from bot import channelforward

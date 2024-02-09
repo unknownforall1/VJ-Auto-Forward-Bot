@@ -12,7 +12,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 # Handler for when bot is added to a group
-@# Import the necessary modules
+# Import the necessary modules
 from pyrogram import Client, filters
 from pyrogram.types import ChatMember, ChatPermissions
 

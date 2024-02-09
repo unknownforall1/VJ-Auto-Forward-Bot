@@ -12,7 +12,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 # Handler for when bot is added to a group
-@channelforwardbot.on_chat_created()
+@channelforward.on_chat_created()
 async def send_add_me_button(client, chat):
     if chat.type == "supergroup":
         await client.send_message(

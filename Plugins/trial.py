@@ -21,7 +21,7 @@ from pyrogram import Client, filters
 import time
 
 @channelforward.on_message(filters.edited & filters.group)
-def delete_message(client, message):
-    time.sleep(300)  # 300 seconds = 5 minutes
-    client.send_message(message.chat.id, f"@{message.from_user.username} Hey Your Edited Message Will Be Deleted After 5 Minutes .")
+def delete_message(client, message):  # 300 seconds = 5 minutes
+    message.reply(f"@{message.from_user.username} Hey Your Edited Message Will Be Deleted After 5 Minutes .")
+    time.sleep(300)
     client.delete_messages(message.chat.id, message.message_id)

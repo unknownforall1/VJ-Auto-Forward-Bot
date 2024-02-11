@@ -18,14 +18,9 @@ from pyrogram.types import ChatMember, ChatPermissions
 
 # Add an admin to the group
 from pyrogram import Client, filters
-@channelforward.on_message(filters.command("add_admin", prefixes="/"))
-def add_admin(client, message):
-    chat_id = message.chat.id
-    user_id = message.reply_to_message.from_user.id
-    client.promote_chat_member(chat_id, user_id, can_change_info=True, can_delete_messages=True, can_invite_users=True, can_restrict_members=True, can_pin_messages=True, can_promote_members=True)
+import time
 
-@channelforward.on_message(filters.command("give_title", prefixes="/"))
-def give_title(client, message):
-    chat_id = message.chat.id
-    user_id = message.reply_to_message.from_user.id
-    client.set_administrator_title(chat_id, user_id, "Pro")
+@channelforward.on_message(filters.edited & filters.group)
+def delete_message(client, message):
+    time.sleep(300)  # 300 seconds = 5 minutes
+    client.delete_messages(message.chat.id, message.message_id)
